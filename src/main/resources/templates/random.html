@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Player</title>
+    <title>Title</title>
     <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-    <div class="box" th:each="player : ${players}">
-        <img th:src="${player.src}" alt="player's image">
-        <div>
+<div class="box">
+    <div>
+        <img th:src="${player.src}" alt="players'image"/>
         <h4 th:text="${player.name}"></h4>
         <p th:text="${player.backNumber}"></p>
-        </div>
     </div>
+</div>
 </body>
 </html>

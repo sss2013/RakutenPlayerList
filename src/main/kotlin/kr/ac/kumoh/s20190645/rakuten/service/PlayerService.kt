@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service
 @Service
 class PlayerService (private val playerRepository : PlayerRepository) {
     fun findAllPlayer() = playerRepository.findAll()
+    fun findRandom() = playerRepository.findAll().random()
 }

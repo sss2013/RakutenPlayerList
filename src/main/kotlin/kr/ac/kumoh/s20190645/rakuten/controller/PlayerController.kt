@@ -9,10 +9,17 @@ import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
 class PlayerController (private val playerService : PlayerService ) {
 
     @GetMapping("/list")
-    fun list(model: Model) : String{
-        val result= playerService.findAllPlayer()
-        println(result[0])
-        model.addAttribute("name", "Kishi")
+    fun list(model: Model) : String {
+        val result = playerService.findAllPlayer()
+        model.addAttribute("players", result)
         return "list"
     }
+
+    @GetMapping("/random")
+    fun random(model: Model) : String {
+        val result = playerService.findRandom()
+        model.addAttribute("player",result)
+        return "random"
+    }
+
 }
