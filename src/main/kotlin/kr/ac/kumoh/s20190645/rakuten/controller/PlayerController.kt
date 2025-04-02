@@ -1,17 +1,16 @@
 package kr.ac.kumoh.s20190645.rakuten.controller
 
-import kr.ac.kumoh.s20190645.rakuten.repository.PlayerRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 class PlayerController(
     private val playerService: PlayerService,
-    private val playerRepository: PlayerRepository
 ) {
 
     @GetMapping("/list")
@@ -26,6 +25,13 @@ class PlayerController(
         val result = playerService.findRandom()
         model.addAttribute("player",result)
         return "random"
+    }
+
+    @GetMapping("/info/{backNumber}")
+    fun info(model:Model , @PathVariable backNumber: Int) :String{
+        val result = playerService.findPlayer(backNumber) ?: return "../static/index"
+        model.addAttribute("player",result)
+        return "info"
     }
 
     @GetMapping("/add")

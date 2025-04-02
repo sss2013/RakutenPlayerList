@@ -4,6 +4,22 @@
 }
 
 .box img {
-    width : 150px;
-    margin-right : 20px;
+    width: 150px;
+    margin-right: 20px;
+}
+
+input, button {
+    padding : 8px 13px;
+    margin-top : 5px;
+    border : 1px solid grey;
+    border-radius : 4px;
+    vertical-align : middle;
+}
+button {
+    background : black;
+    color : white;
+    border : none;
+}
+input {
+    display : block;
 }
