@@ -14,16 +14,6 @@ class PlayerService (private val playerRepository : PlayerRepository) {
     }
 
     fun findPlayer(backNumber:Int) : Player?{
-        val list = playerRepository.findAll()
-        var player : Player? = null
-        for (optional in list){
-            if (optional.backNumber == backNumber){
-                player=optional
-            }
-        }
-        if (player != null) {
-            return player
-        }
-        return null
+        return playerRepository.findByBackNumber(backNumber)
     }
 }
