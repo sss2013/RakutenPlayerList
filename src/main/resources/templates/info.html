@@ -11,6 +11,9 @@
         <img th:src="${player.src}" alt="players'image"/>
         <h4 th:text="${player.name}"></h4>
         <p th:text="${player.backNumber}"></p>
+        <a th:href="@{/update/{backNumber}(backNumber=${player.backNumber})}">
+            <button th:text="選手情報更新"></button>
+        </a>
     </div>
 </div>
 </body>

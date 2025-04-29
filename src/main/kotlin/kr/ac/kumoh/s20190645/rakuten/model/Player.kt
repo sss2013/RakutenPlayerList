@@ -9,9 +9,9 @@ import jakarta.persistence.Id
 data class Player(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
-    val name: String?,
-    val backNumber: Int?,
-    val src: String,
+    var name: String?,
+    var backNumber: Int?,
+    var src: String,
     ) {
     constructor() : this(null, "", 0,"") {}
 }

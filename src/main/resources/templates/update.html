@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/playerUpdate" method="post">
+    <input type="hidden" name="info" th:value="${player.backNumber}">
+    <input type="text" name="name" th:value="${player.name}">
+    <input type="text" name="backNumber" th:value="${player.backNumber}">
+    <button type="submit">転送</button>
+</form>
+</body>
+</html>

@@ -31,6 +31,7 @@ repositories {
         implementation("com.microsoft.sqlserver:mssql-jdbc:8.4.1.jre8")
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-jdbc")
+        implementation("org.jboss.logging:jboss-logging:3.5.0.Final")
     }
 
     kotlin {

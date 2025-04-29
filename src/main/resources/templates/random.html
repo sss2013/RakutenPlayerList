@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="box">
+    <div th:replace="~{ nav.html :: navbar }"></div>
     <div>
         <img th:src="${player.src}" alt="players'image"/>
         <h4 th:text="${player.name}"></h4>
