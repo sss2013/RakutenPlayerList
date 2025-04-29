@@ -1,4 +1,16 @@
-# RakutenPlayerList
+# 楽天イーグルス選手情報サイト
 
-Kotlin, Sring Boot, DataBase(SQL)を勉強しながら
-楽天イーグルの選手ページを作る．
+Spring BootとAzure SQLを使用した、楽天イーグルスの選手情報を閲覧・管理できるWebアプリケーション
+
+## 概要
+
+このアプリケーションは、楽天イーグルスの選手一覧を表示し、選手の詳細ページにアクセスすることができます
+
+## 使用技術
+
+- Spring Boot (Kotlin)
+- Spring MVC / Thymeleaf
+- Azure SQL DataBase
+- Spring Data JPA
+- HTML / CSS
+
