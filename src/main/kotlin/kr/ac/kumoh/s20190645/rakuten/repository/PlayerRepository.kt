@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PlayerRepository : JpaRepository<Player,Long> {
     fun findByBackNumber(backNumber: Int?) : Player?
+    fun deleteByBackNumber(backNumber: Int?)
 }

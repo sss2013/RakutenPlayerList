@@ -1,37 +1,55 @@
 package kr.ac.kumoh.s20190645.rakuten.service
 
+import kr.ac.kumoh.s20190645.rakuten.model.Player
 import kr.ac.kumoh.s20190645.rakuten.repository.PlayerRepository
 import org.springframework.stereotype.Service
-import kr.ac.kumoh.s20190645.rakuten.model.Player
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class PlayerService (private val playerRepository : PlayerRepository) {
+class PlayerService(private val playerRepository: PlayerRepository) {
     fun findAllPlayer() = playerRepository.findAll()
     fun findRandom() = playerRepository.findAll().random()
 
-    fun addPlayer(name:String,backNumber:Int?) :String?{
-        if (backNumber!=null && ( backNumber<0 || backNumber>150) ) return "背番号は０から１５０までです．"
+    fun addPlayer(name: String, backNumber: Int?): String? {
+        if (backNumber != null && (backNumber < 0 || backNumber > 150)) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
-        playerRepository.save(Player(null,name,backNumber,"https://www.rakuteneagles.jp/media/sites/3/team/player/2025/${backNumber}.jpg"))
+        playerRepository.save(
+            Player(
+                null,
+                name,
+                backNumber,
+                "https://www.rakuteneagles.jp/media/sites/3/team/player/2025/${backNumber}.jpg"
+            )
+        )
         return "$name ( $backNumber ）選手追加できました"
     }
 
-    fun updatePlayer(found:Player, name:String, backNumber:Int?) : String{
-        if (backNumber==null) return "背番号をちゃんと入力してください"
-        if ( backNumber<0 || backNumber>150 ) return "背番号は０から１５０までです．"
+    fun updatePlayer(found: Player, name: String, backNumber: Int?): String {
+        if (backNumber == null) return "背番号をちゃんと入力してください"
+        if (backNumber < 0 || backNumber > 150) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
-        found.name=name
-        found.backNumber=backNumber
-        found.src="https://www.rakuteneagles.jp/media/sites/3/team/player/2025/${backNumber}.jpg"
+        found.name = name
+        found.backNumber = backNumber
+        found.src = "https://www.rakuteneagles.jp/media/sites/3/team/player/2025/${backNumber}.jpg"
         playerRepository.save(found)
         return "$name ( $backNumber ) 選手に更新できました "
     }
 
-    fun findPlayer(backNumber:Int?) : Player?{
+    fun findPlayer(backNumber: Int?): Player? {
         return playerRepository.findByBackNumber(backNumber)
     }
 
-    fun isOnlyKanji(text: String) : Boolean {
+    @Transactional
+    fun deletePlayer(backNumber: Int?) : Int {
+        if (findPlayer(backNumber) != null) {
+            playerRepository.deleteByBackNumber(backNumber)
+            return 1
+        } else{
+            return 0
+        }
+    }
+
+    fun isOnlyKanji(text: String): Boolean {
         val kanjiRegex = Regex("[\u4E00-\u9FFF]+$")
         return kanjiRegex.matches(text)
     }

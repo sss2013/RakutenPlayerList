@@ -6,15 +6,35 @@
     <link href="/main.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="~{nav.html :: navbar}"></div>
+<button class="btn">選手削除</button>
 <div class="box">
     <div>
         <img th:src="${player.src}" alt="players'image"/>
         <h4 th:text="${player.name}"></h4>
-        <p th:text="${player.backNumber}"></p>
+        <p class="number" th:text="${player.backNumber}"></p>
         <a th:href="@{/update/{backNumber}(backNumber=${player.backNumber})}">
             <button th:text="選手情報更新"></button>
         </a>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.btn')[0].addEventListener('click', function () {
+        const confirmed = window.confirm("本当に削除してもよろしいですか？");
+        if (!confirmed) return;
+
+        const playerNumber = document.querySelectorAll('.number')[0].textContent;
+        fetch('/delete', {
+            method: 'POST',
+            headers: {'content-Type': 'application/json'},
+            body: JSON.stringify({playerNumber: playerNumber})
+        })
+            .then(response => response.text())
+            .then (url=>{
+                window.location.href=url;
+            })
+    })
+</script>
 </body>
 </html>

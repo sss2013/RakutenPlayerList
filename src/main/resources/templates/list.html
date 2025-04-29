@@ -6,7 +6,7 @@
     <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{ nav.html :: navbar }"></div>
+<div class="nav-title" th:replace="~{ nav.html :: navbar }"></div>
 <div class="box" th:each="player : ${players}">
     <a th:href="@{/info/{backNumber}(backNumber=${player.backNumber})}">
         <img th:src="${player.src}" alt="player's image">
@@ -16,5 +16,7 @@
         <p th:text="${player.backNumber}"></p>
     </div>
 </div>
+
+
 </body>
 </html>
