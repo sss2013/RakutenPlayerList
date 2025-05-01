@@ -1,13 +1,12 @@
-<body>
-<div class="nav" th:fragment="navbar">
+<div th:fragment="navbar">
     <div class="nav-title">
-        <img src="https://www.rakuteneagles.jp/media/sites/3/common/logo.svg"
+        <img class="nav-logo" src="https://www.rakuteneagles.jp/media/sites/3/common/logo.svg"
              alt="rakuten eagles logo"/>
-        <a class="logo">楽天イーグルス</a>
+        <a class="nav-name">楽天イーグルス</a>
     </div>
     <div class="nav-column">
         <a th:href="@{/list}">選手リスト</a>
         <a th:href="@{/add}">選手追加</a>
+        <a th:href="@{/signIn}">会員登録</a>
     </div>
 </div>
-</body>

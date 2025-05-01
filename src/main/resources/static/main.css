@@ -1,42 +1,45 @@
-.box {
-    margin : 30px auto;
-    display : flex;
-}
+    .box {
+        margin: 30px auto;
+        display: flex;
+    }
 
-.box img {
-    width: 150px;
-    margin-right: 20px;
-}
+    .box img {
+        width: 150px;
+        margin-right: 20px;
+    }
 
-.nav-title {
-    display: flex;
-    justify-content: center;  /* 수평 가운데 정렬 */
-    align-items: center;      /* 수직 가운데 정렬 */
-    gap: 10px;                /* 이미지와 글자 사이 여백 */
-    padding: 10px;
-}
+    .nav-title {
+        display: flex;
+        justify-content: center; /* 수평 가운데 정렬 */
+        align-items: center; /* 수직 가운데 정렬 */
+        gap: 10px; /* 이미지와 글자 사이 여백 */
+        padding: 10px;
+    }
 
-.nav-title img {
-    width: 10%;
-}
-.logo{
-    font-size: 30px;
-    letter-spacing: 5px;
-    color: darkred;
-}
+    .nav-title > .nav-name {
+        font-size: 30px;
+        letter-spacing: 5px;
+        color: darkred;
+    }
+
+    .nav-title > .nav-logo{
+        width: 20%;
+    }
 
     input, button {
-    padding : 8px 13px;
-    margin-top : 5px;
-    border : 1px solid grey;
-    border-radius : 4px;
-    vertical-align : middle;
-}
-button {
-    background : black;
-    color : white;
-    border : none;
-}
-input {
-    display : block;
-}
+        padding: 8px 13px;
+        margin-top: 5px;
+        border: 1px solid grey;
+        border-radius: 4px;
+        vertical-align: middle;
+    }
+
+    button {
+        background: black;
+        color: white;
+        border: none;
+    }
+
+    input {
+        display: block;
+    }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会員登録</title>
+    <link href="/input.css" rel="stylesheet">
+</head>
+<body>
+<form id="signup-form">
+    <input type="text" name="username" placeholder="ID">
+    <input type="password" name="password" placeholder="パスワード">
+    <input type="text" name="nickname" placeholder="ニックネーム">
+    <button type="submit">登録</button>
+</form>
+
+<script>
+    document.getElementById("signup-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch("/infoInput", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.text();
+
+            if (result==="ok"){
+                window.location.href="/login";
+            } else {
+                alert(result);
+            }
+        } catch (error) {
+            console.error("エラー発生", error);
+            alert("サーバーエラーが発生しました");
+        }
+    });
+</script>
+</body>
+</html>

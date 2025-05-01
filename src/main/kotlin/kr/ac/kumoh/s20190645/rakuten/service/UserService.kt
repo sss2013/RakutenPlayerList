@@ -1,0 +1,68 @@
+package kr.ac.kumoh.s20190645.rakuten.service
+
+import kr.ac.kumoh.s20190645.rakuten.model.User
+import kr.ac.kumoh.s20190645.rakuten.repository.UserRepository
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
+
+@Service
+class UserService(private val userRepository: UserRepository) {
+
+    fun addUser(userName: String, passWord: String, nickName: String): String {
+        if (!isValidId(userName)) {
+            return "IDは英語と数字を含めて５文字以上にしてください"
+        }
+
+        if (!isValidPassword(passWord)) {
+            return "パスワードは英語と数字、記号を含めて８文字以上にしてください"
+        }
+
+        val nickNameResult = isValidNickname(nickName)
+        if (nickNameResult != "true") {
+            return nickNameResult
+        }
+
+        val encoder =  BCryptPasswordEncoder();
+        if (isDuplicateId(userName))
+            return "IDが重複しています"
+        if (isDuplicateNickname(nickName))
+            return "ニックネームが重複しています"
+
+        userRepository.save(User(null, userName, encoder.encode(passWord), nickName))
+        return "ok"
+    }
+
+    fun isDuplicateId(userName: String): Boolean {
+        val found = userRepository.findByUsername(userName)?.username
+        return found != null
+    }
+
+    fun isDuplicateNickname(nickName: String): Boolean {
+        val found = userRepository.findByNickname(nickName)?.nickname
+        return found!=null
+    }
+
+    fun isValidNickname(nickName: String): String {
+        val length = nickName.length > 2
+        val pattern = Regex("[\u30A0-\u30FF\u3040-\u309F\u4E00-\u9FFFA-Za-z]")
+        val check = pattern.containsMatchIn(nickName)
+        return if (!length) "ニックネームは３文字以上にしてください"
+        else if (!check) "ニックネームには英語と漢字、ひらがなとカタカナでいずれか１文字以上入れてください"
+        else
+            "true"
+    }
+
+    fun isValidId(id: String): Boolean {
+        val regex = Regex("^[a-z0-9]{5,15}$")
+        return regex.matches(id)
+    }
+
+    fun isValidPassword(passWord: String): Boolean {
+        val length = passWord.length >= 8
+        val hasLetter = passWord.contains(Regex("[A-Za-z]"))
+        val hasDigit = passWord.contains(Regex("[0-9]"))
+        val hasSpecial = passWord.contains(Regex("[^A-Za-z0-9]"))
+
+        return length && hasLetter && hasDigit && hasSpecial
+    }
+}
