@@ -6,11 +6,23 @@
     <link href="/input.css" rel="stylesheet">
 </head>
 <body>
+<div th:text="会員登録"></div>
 <form id="signup-form">
+    <div>
     <input type="text" name="username" placeholder="ID">
+        <p class="description">IDは英語と数字を含めて５文字以上にしてください</p>
+    </div>
+    <div>
     <input type="password" name="password" placeholder="パスワード">
+        <p class="description">パスワードは英語と数字、記号を含めて８文字以上にしてください</p>
+    </div>
+    <div>
     <input type="text" name="nickname" placeholder="ニックネーム">
+        <p class="description">ニックネームは３文字以上にしてください</p>
+    </div>
+    <div>
     <button type="submit">登録</button>
+    </div>
 </form>
 
 <script>
@@ -27,7 +39,7 @@
 
             const result = await response.text();
 
-            if (result==="ok"){
+            if (result==="ok") {
                 window.location.href="/login";
             } else {
                 alert(result);

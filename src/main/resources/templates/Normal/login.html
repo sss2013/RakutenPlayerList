@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>login</title>
-    <link href="/input.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<form th:action="@{/login}" method="POST">
+<div th:replace ="~{ /Normal/nav.html :: navbar}"> </div>
+
+<div th:if="${param.error}">
+    <h4>IDやパスワードが間違っています</h4>
+</div>
+
+<h4>ログインしてください</h4>
+
+<form action="/login" method="POST">
     <div>
         <label>Username:</label>
         <input type="text" name="username">
@@ -16,7 +24,7 @@
         <input type="password" name="password">
     </div>
     <div>
-    <button type="submit">ログイン</button>
+        <button type="submit">ログイン</button>
     </div>
 </form>
 </body>

@@ -7,9 +7,9 @@ import jakarta.persistence.*
 data class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
-    var username: String?,
-    var password: String?,
-    var nickname: String?
+    var username: String,
+    var password: String,
+    var nickname: String
 ) {
     constructor() : this(null, "", "","")
 }

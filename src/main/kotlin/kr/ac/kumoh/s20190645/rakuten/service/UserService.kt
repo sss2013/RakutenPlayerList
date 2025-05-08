@@ -6,11 +6,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository, val encoder : BCryptPasswordEncoder ) {
 
     fun addUser(userName: String, passWord: String, nickName: String): String {
         if (!isValidId(userName)) {
             return "IDは英語と数字を含めて５文字以上にしてください"
+        }
+
+        if (!isContainsAdmin(userName)){
+            return "IDに不適切な文字が含まれています"
         }
 
         if (!isValidPassword(passWord)) {
@@ -18,11 +22,12 @@ class UserService(private val userRepository: UserRepository) {
         }
 
         val nickNameResult = isValidNickname(nickName)
+
         if (nickNameResult != "true") {
             return nickNameResult
         }
+        
 
-        val encoder =  BCryptPasswordEncoder();
         if (isDuplicateId(userName))
             return "IDが重複しています"
         if (isDuplicateNickname(nickName))
@@ -55,6 +60,10 @@ class UserService(private val userRepository: UserRepository) {
     fun isValidId(id: String): Boolean {
         val regex = Regex("^[a-z0-9]{5,15}$")
         return regex.matches(id)
+    }
+
+    fun isContainsAdmin(id:String) : Boolean{
+        return !id.contains("admin")
     }
 
     fun isValidPassword(passWord: String): Boolean {

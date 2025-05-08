@@ -1,7 +1,10 @@
 package kr.ac.kumoh.s20190645.rakuten.controller
 
+import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.UserService
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -14,7 +17,7 @@ class UserController (
 
     @GetMapping("/signIn")
     fun signIn() : String{
-        return "signIn"
+        return "/Normal/signIn"
     }
 
     @PostMapping("/infoInput")
@@ -29,6 +32,22 @@ class UserController (
 
     @GetMapping("/login")
     fun loginForm() : String{
-        return "login"
+        return "/Normal/login"
     }
+
+    @GetMapping("/my-page")
+    fun myPage(auth : Authentication,model: Model) :String{
+        if (!auth.isAuthenticated)
+            return "/Normal/list"
+
+        val userDetails = auth.principal as MyUserDetails
+        model.addAttribute("nickName",userDetails.nickname)
+        return "/Operation/myPage"
+    }
+
+    @GetMapping("/access-denied")
+    fun accessDenied() : String {
+        return "/Normal/accessDenied"
+    }
+
 }

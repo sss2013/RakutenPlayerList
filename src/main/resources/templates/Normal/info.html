@@ -6,7 +6,7 @@
     <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{nav.html :: navbar}"></div>
+<div th:replace="~{/Normal/nav.html :: navbar}"></div>
 <button class="btn">選手削除</button>
 <div class="box">
     <div>
@@ -27,7 +27,7 @@
         const playerNumber = document.querySelectorAll('.number')[0].textContent;
         fetch('/delete', {
             method: 'POST',
-            headers: {'content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({playerNumber: playerNumber})
         })
             .then(response => response.text())
