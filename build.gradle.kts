@@ -34,6 +34,8 @@ repositories {
         implementation("org.jboss.logging:jboss-logging:3.5.0.Final")
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
+        implementation("org.springframework.session:spring-session-core")
+        implementation("org.springframework.session:spring-session-jdbc")
     }
 
     kotlin {

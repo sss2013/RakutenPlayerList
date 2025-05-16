@@ -7,6 +7,7 @@
 </head>
 <body>
 <form action="/playerUpdate" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <input type="hidden" name="info" th:value="${player.backNumber}">
     <input type="text" name="name" th:value="${player.name}">
     <input type="text" name="backNumber" th:value="${player.backNumber}">

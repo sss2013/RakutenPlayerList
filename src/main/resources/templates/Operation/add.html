@@ -7,6 +7,8 @@
 </head>
 <body>
 <form action="/playerAdd" method="POST">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
     <input name="name">
     <input name="backNumber">
     <button type="submit">転送</button>

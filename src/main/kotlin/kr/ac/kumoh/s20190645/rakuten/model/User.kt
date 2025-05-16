@@ -9,7 +9,9 @@ data class User(
     var id: Long?,
     var username: String,
     var password: String,
-    var nickname: String
+    @Column(columnDefinition = "NVARCHAR(100)")
+    var nickname: String,
+    var number: Long?
 ) {
-    constructor() : this(null, "", "","")
+    constructor() : this(null, "", "","",null)
 }

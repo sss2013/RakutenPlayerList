@@ -26,14 +26,15 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
         if (nickNameResult != "true") {
             return nickNameResult
         }
-        
 
         if (isDuplicateId(userName))
             return "IDが重複しています"
         if (isDuplicateNickname(nickName))
             return "ニックネームが重複しています"
 
-        userRepository.save(User(null, userName, encoder.encode(passWord), nickName))
+        val lastNumber = userRepository.findMaxNumber() ?: 0
+
+        userRepository.save(User(null, userName, encoder.encode(passWord), nickName,lastNumber+1))
         return "ok"
     }
 
@@ -73,5 +74,10 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
         val hasSpecial = passWord.contains(Regex("[^A-Za-z0-9]"))
 
         return length && hasLetter && hasDigit && hasSpecial
+    }
+
+    fun getUser(number: Long?): User?{
+        val found = userRepository.findByNumber(number) ?: return null
+        return found
     }
 }

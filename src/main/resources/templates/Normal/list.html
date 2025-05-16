@@ -6,16 +6,19 @@
     <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{ /Normal/nav.html :: navbar }"></div>
-<div class="box" th:each="player : ${players}">
+<div th:replace="~{ Normal/nav.html :: navbar }"></div>
+<div class="box" th:if="${players != null}" th:each="player : ${players}">
     <a th:href="@{/info/{backNumber}(backNumber=${player.backNumber})}">
         <img th:src="${player.src}" alt="player's image">
     </a>
     <div>
         <h4 th:text="${player.name}"></h4>
         <p th:text="${player.backNumber}"></p>
+        <p>追加した人：<span th:text="${player.who}"></span></p>
     </div>
 </div>
-
+<div th:if="${players == null}">
+    <p>선수 정보가 없습니다.</p>
+</div>
 </body>
 </html>

@@ -1,9 +1,6 @@
 package kr.ac.kumoh.s20190645.rakuten.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity
 data class Player(
@@ -12,6 +9,8 @@ data class Player(
     var name: String?,
     var backNumber: Int?,
     var src: String,
+    @Column(columnDefinition = "NVARCHAR(100)")
+    var who: String
     ) {
-    constructor() : this(null, "", 0,"") {}
+    constructor() : this(null, "", 0,"","") {}
 }

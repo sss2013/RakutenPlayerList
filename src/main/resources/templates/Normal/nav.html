@@ -1,4 +1,5 @@
-<div th:fragment="navbar">
+<div th:fragment="navbar" xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="nav-title">
         <img class="nav-logo" src="https://www.rakuteneagles.jp/media/sites/3/common/logo.svg"
              alt="rakuten eagles logo"/>
@@ -6,9 +7,14 @@
     </div>
     <div class="nav-column">
         <a th:href="@{/list}">選手リスト</a>
-        <a th:href="@{/add}">選手追加</a>
-        <a th:href="@{/my-page}">マイページ</a>
+        <a th:href="@{/login}" sec:authorize="!isAuthenticated()">ログイン</a>
+        <a th:href="@{/add}" sec:authorize="hasRole('ADMIN')">選手追加</a>
+        <a th:href="@{/my-page}" sec:authorize="isAuthenticated()">マイページ</a>
         <a th:href="@{/signIn}">会員登録</a>
-        <a th:href="@{/logout}">ログアウト</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" sec:authorize="isAuthenticated()">ログアウト</button>
+        </form>
+        <span th:if="${#authentication.principal != 'anonymousUser'}"
+              th:text="${#authentication.principal.nickname}"></span>
     </div>
 </div>

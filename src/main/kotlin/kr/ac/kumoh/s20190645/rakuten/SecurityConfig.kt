@@ -2,7 +2,6 @@ package kr.ac.kumoh.s20190645.rakuten
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -10,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.access.AccessDeniedHandlerImpl
+import org.springframework.security.web.csrf.CsrfTokenRepository
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
 
 @Configuration
 @EnableWebSecurity
@@ -17,13 +18,17 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl
 class SecurityConfig {
 
     @Bean
-    fun passwordEncoder() : BCryptPasswordEncoder {
+    fun passwordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
     }
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .csrf { it.disable() }
+        http.
+            csrf {
+                it.csrfTokenRepository(csrfTokenRepository())
+                    .ignoringRequestMatchers("/login")
+            }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/Operation/**")
@@ -46,10 +51,17 @@ class SecurityConfig {
     }
 
     @Bean
-    fun customDeniedHandler() : AccessDeniedHandler {
-        val handler= AccessDeniedHandlerImpl()
+    fun customDeniedHandler(): AccessDeniedHandler {
+        val handler = AccessDeniedHandlerImpl()
         handler.setErrorPage("/access-denied")
         return handler
+    }
+
+    @Bean
+    fun csrfTokenRepository(): CsrfTokenRepository {
+        val repository: HttpSessionCsrfTokenRepository = HttpSessionCsrfTokenRepository()
+        repository.setHeaderName("X-XSRF-TOKEN")
+        return repository
     }
 
 }

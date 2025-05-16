@@ -1,5 +1,6 @@
 package kr.ac.kumoh.s20190645.rakuten.controller
 
+import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -18,44 +19,45 @@ class PlayerController(
 
     @GetMapping("/")
     fun home(): String {
-        return "/Normal/index"
+        return "Normal/index"
     }
 
     @GetMapping("/list")
     fun list(model: Model): String {
         val result = playerService.findAllPlayer()
         model.addAttribute("players", result)
-        return "/Normal/list"
+        return "Normal/list"
     }
 
     @GetMapping("/random")
     fun random(model: Model): String {
         val result = playerService.findRandom()
         model.addAttribute("player", result)
-        return "/Normal/random"
+        return "Normal/random"
     }
 
     @GetMapping("/info/{backNumber}")
     fun info(model: Model, @PathVariable backNumber: Int): String {
         val result = playerService.findPlayer(backNumber)
         model.addAttribute("player", result)
-        return "/Normal/info"
+        return "Normal/info"
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     fun add(): String {
-        return "/Operation/add"
+        return "Operation/add"
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/playerAdd")
-    fun addPlayer(model: Model, @RequestParam params: Map<String, String>): String {
+    fun addPlayer(model: Model, @RequestParam params: Map<String, String>, auth: Authentication): String {
         val name = params["name"] ?: "unknown"
         val backNumber = params["backNumber"]?.toIntOrNull()
-        val addResult = playerService.addPlayer(name, backNumber)
+        val who = auth.principal as MyUserDetails
+        val addResult = playerService.addPlayer(name, backNumber,who.nickname)
         model.addAttribute("result", addResult)
-        return "/Operation/addResult"
+        return "Operation/addResult"
     }
 
     
@@ -64,7 +66,7 @@ class PlayerController(
     fun updateForm(model: Model, @PathVariable backNumber: Int): String {
         val found = playerService.findPlayer(backNumber)
         model.addAttribute("player", found)
-        return "/Operation/update"
+        return "Operation/update"
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -76,7 +78,7 @@ class PlayerController(
         val backNumber = params["backNumber"]?.toIntOrNull()
         val result = playerService.updatePlayer(found, name, backNumber)
         model.addAttribute("result", result)
-        return "/Operation/updateResult"
+        return "Operation/updateResult"
     }
 
     @PreAuthorize("hasRole('ADMIN')")
