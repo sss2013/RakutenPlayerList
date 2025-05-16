@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-private val logger = LoggerFactory.getLogger(PlayerController::class.java)
-
 @Controller
 class PlayerController(
     private val playerService: PlayerService,
@@ -27,6 +25,16 @@ class PlayerController(
         val result = playerService.findAllPlayer()
         model.addAttribute("players", result)
         return "Normal/list"
+    }
+
+    @GetMapping("/list/{curr}")
+    fun listByPage(model:Model, @PathVariable curr:Int) : String{
+        val result=playerService.findPlayerIndexed(curr)
+
+        model.addAttribute("page",curr)
+        model.addAttribute("totalPages",result.totalPages)
+        model.addAttribute("players", result.content)
+        return "Normal/listPage"
     }
 
     @GetMapping("/random")
@@ -60,7 +68,7 @@ class PlayerController(
         return "Operation/addResult"
     }
 
-    
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{backNumber}")
     fun updateForm(model: Model, @PathVariable backNumber: Int): String {

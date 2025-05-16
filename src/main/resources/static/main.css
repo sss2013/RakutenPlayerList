@@ -43,3 +43,43 @@
     input {
         display: block;
     }
+
+     .pagination {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      list-style: none;
+    }
+
+    .pagination li {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .pagination a {
+      display: block;
+      padding: 8px 12px;
+      text-decoration: none;
+      color: #007bff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .pagination a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination .active a {
+      background-color: #007bff;
+      color: white;
+      pointer-events: none;
+      border-color: #007bff;
+    }
+
+    .pagination .disabled a {
+      color: #ccc;
+      pointer-events: none;
+      border-color: #eee;
+    }

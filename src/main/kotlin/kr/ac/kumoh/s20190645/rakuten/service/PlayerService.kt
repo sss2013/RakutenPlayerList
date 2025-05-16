@@ -2,6 +2,9 @@ package kr.ac.kumoh.s20190645.rakuten.service
 
 import kr.ac.kumoh.s20190645.rakuten.model.Player
 import kr.ac.kumoh.s20190645.rakuten.repository.PlayerRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -9,11 +12,15 @@ import org.springframework.transaction.annotation.Transactional
 class PlayerService(private val playerRepository: PlayerRepository) {
     fun findAllPlayer() = playerRepository.findAll()
     fun findRandom() = playerRepository.findAll().random()
+    fun findPlayer(backNumber: Int?): Player? {
+        return playerRepository.findByBackNumber(backNumber)
+    }
+
 
     fun addPlayer(name: String, backNumber: Int?,who:String): String? {
         if (backNumber != null && (backNumber < 0 || backNumber > 150)) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
-        if (playerRepository.findByBackNumber(backNumber)!=null)
+        if (findPlayer(backNumber)!=null)
             return "選手名、または背番号がすでに存在しています"
 
         playerRepository.save(
@@ -39,9 +46,11 @@ class PlayerService(private val playerRepository: PlayerRepository) {
         return "$name ( $backNumber ) 選手に更新できました "
     }
 
-    fun findPlayer(backNumber: Int?): Player? {
-        return playerRepository.findByBackNumber(backNumber)
+    fun findPlayerIndexed(number: Int): Page<Player> {
+        val pageable: Pageable = PageRequest.of(number,5)
+        return playerRepository.findAllByOrderByBackNumberAsc(pageable)
     }
+
 
     @Transactional
     fun deletePlayer(backNumber: Int?) : Int {
