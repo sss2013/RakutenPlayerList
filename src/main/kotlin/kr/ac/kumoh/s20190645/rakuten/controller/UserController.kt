@@ -12,6 +12,7 @@ class UserController (
     private val userService : UserService
 ) {
 
+    /** 회원가입 페이지를 표시하는 기능 (이미 로그인된 경우 목록 페이지로 리다이렉트) */
     @GetMapping("/signIn")
     fun signIn(auth: Authentication?): String {
         if (auth?.isAuthenticated == true)
@@ -20,6 +21,7 @@ class UserController (
         return "Normal/signIn"
     }
 
+    /** 회원가입 정보를 처리하는 기능 */
     @PostMapping("/infoInput")
     @ResponseBody
     fun signCheck(@RequestParam params:Map<String,String>): String{
@@ -30,11 +32,13 @@ class UserController (
         return result
     }
 
+    /** 로그인 페이지를 표시하는 기능 */
     @GetMapping("/login")
     fun loginForm() : String{
         return "Normal/login"
     }
 
+    /** 인증된 사용자의 마이페이지를 표시하는 기능 */
     @GetMapping("/my-page")
     fun myPage(auth : Authentication,model: Model) :String{
         if (!auth.isAuthenticated)
@@ -45,11 +49,13 @@ class UserController (
         return "Operation/myPage"
     }
 
+    /** 접근 거부 페이지를 표시하는 기능 */
     @GetMapping("/access-denied")
     fun accessDenied() : String {
         return "Normal/accessDenied"
     }
 
+    /** 특정 번호의 사용자 정보를 JSON으로 반환하는 기능 */
     @GetMapping("/user/{number}")
     @ResponseBody
     fun getUser(@PathVariable number:Long?): UserData {
@@ -58,6 +64,7 @@ class UserController (
     }
 }
 
+/** 사용자 정보를 담는 데이터 클래스 */
 data class UserData(
     val username: String = "",
     val nickname: String = ""
