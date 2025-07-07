@@ -15,11 +15,13 @@ class PlayerController(
     private val playerService: PlayerService,
 ) {
 
+    /** 홈페이지를 표시하는 기능 */
     @GetMapping("/")
     fun home(): String {
         return "Normal/index"
     }
 
+    /** 모든 선수 목록을 표시하는 기능 */
     @GetMapping("/list")
     fun list(model: Model): String {
         val result = playerService.findAllPlayer()
@@ -27,6 +29,7 @@ class PlayerController(
         return "Normal/list"
     }
 
+    /** 페이지네이션을 사용하여 선수 목록을 표시하는 기능 */
     @GetMapping("/list/{curr}")
     fun listByPage(model:Model, @PathVariable curr:Int) : String{
         val result=playerService.findPlayerIndexed(curr)
@@ -37,6 +40,7 @@ class PlayerController(
         return "Normal/listPage"
     }
 
+    /** 무작위 선수를 표시하는 기능 */
     @GetMapping("/random")
     fun random(model: Model): String {
         val result = playerService.findRandom()
@@ -44,6 +48,7 @@ class PlayerController(
         return "Normal/random"
     }
 
+    /** 특정 배번호의 선수 상세 정보를 표시하는 기능 */
     @GetMapping("/info/{backNumber}")
     fun info(model: Model, @PathVariable backNumber: Int): String {
         val result = playerService.findPlayer(backNumber)
@@ -51,12 +56,14 @@ class PlayerController(
         return "Normal/info"
     }
 
+    /** 관리자 전용: 선수 추가 폼을 표시하는 기능 */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     fun add(): String {
         return "Operation/add"
     }
 
+    /** 관리자 전용: 새로운 선수를 추가하는 기능 */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/playerAdd")
     fun addPlayer(model: Model, @RequestParam params: Map<String, String>, auth: Authentication): String {
@@ -68,7 +75,7 @@ class PlayerController(
         return "Operation/addResult"
     }
 
-
+    /** 관리자 전용: 선수 정보 수정 폼을 표시하는 기능 */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{backNumber}")
     fun updateForm(model: Model, @PathVariable backNumber: Int): String {
@@ -77,6 +84,7 @@ class PlayerController(
         return "Operation/update"
     }
 
+    /** 관리자 전용: 선수 정보를 수정하는 기능 */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/playerUpdate")
     fun update(model: Model, @RequestParam params: Map<String, String>): String {
@@ -89,6 +97,7 @@ class PlayerController(
         return "Operation/updateResult"
     }
 
+    /** 관리자 전용: 선수를 삭제하는 기능 */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete")
     @ResponseBody
