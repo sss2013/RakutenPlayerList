@@ -57,7 +57,6 @@ class UserController (
         return UserData(user?.username ?: "", user?.nickname ?: "")
     }
 
-
     data class UserData(
         val username: String = "",
         val nickname: String = ""

@@ -16,19 +16,20 @@ class PlayerService(private val playerRepository: PlayerRepository) {
         return playerRepository.findByBackNumber(backNumber)
     }
 
-
-    fun addPlayer(name: String, backNumber: Int?,who:String): String? {
+    fun addPlayer(name: String, backNumber: Int?,who:String,url:String): String? {
         if (backNumber != null && (backNumber < 0 || backNumber > 150)) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
         if (findPlayer(backNumber)!=null)
             return "選手名、または背番号がすでに存在しています"
+        if (url =="unknown")
+            return "URLが正しくありません"
 
         playerRepository.save(
             Player(
                 null,
                 name,
                 backNumber,
-                "https://www.rakuteneagles.jp/media/sites/3/team/player/2025/${backNumber}.jpg",
+                url,
                 who
             )
         )

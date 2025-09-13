@@ -2,6 +2,7 @@ package kr.ac.kumoh.s20190645.rakuten.controller
 
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
+import kr.ac.kumoh.s20190645.rakuten.service.S3Service
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*
 @Controller
 class PlayerController(
     private val playerService: PlayerService,
+    private val s3Service:S3Service,
 ) {
 
     @GetMapping("/")
@@ -59,11 +61,11 @@ class PlayerController(
     @PostMapping("/playerAdd")
     fun addPlayer(model: Model, @RequestParam params: Map<String, String>, auth: Authentication): String {
         val name = params["name"] ?: "unknown"
-        print(name);
         val backNumber = params["backNumber"]?.toIntOrNull()
         val who = auth.principal as MyUserDetails
+        val url = params["url"] ?: "unknown"
 
-        val addResult = playerService.addPlayer(name, backNumber, who.nickname)
+        val addResult = playerService.addPlayer(name, backNumber, who.nickname,url)
         model.addAttribute("result", addResult)
         return "Operation/addResult"
     }
@@ -100,5 +102,12 @@ class PlayerController(
         if (playerService.deletePlayer(number) != 1)
             return "playerInfo/${number}"
         return "/list"
+    }
+
+    @GetMapping("/presigned-url")
+    @ResponseBody
+    fun getURL(@RequestParam filename: String): String{
+        val result = s3Service.createPresignedUrl("test/$filename" )
+        return result
     }
 }
