@@ -13,5 +13,5 @@ Spring BootとAzure SQLを使用した、楽天イーグルスの選手情報を
 - Spring MVC / Thymeleaf
 - Azure SQL DataBase
 - Spring Data JPA
-- HTML / CSS
+- HTML / CSS / JQuery
 
