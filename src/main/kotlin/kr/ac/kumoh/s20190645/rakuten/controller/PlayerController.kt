@@ -1,6 +1,7 @@
 package kr.ac.kumoh.s20190645.rakuten.controller
 
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
+import kr.ac.kumoh.s20190645.rakuten.model.Player
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
 import kr.ac.kumoh.s20190645.rakuten.service.S3Service
 import org.springframework.security.access.prepost.PreAuthorize
@@ -109,5 +110,16 @@ class PlayerController(
     fun getURL(@RequestParam filename: String): String{
         val result = s3Service.createPresignedUrl("test/$filename" )
         return result
+    }
+
+    @PostMapping("/search")
+    @ResponseBody
+    fun getSearch(@RequestBody params:Map<String,String>): List<Player>{
+        val name = params["playerName"] ?: "unknown"
+        return if (name!="unknown") {
+            playerService.searchPlayer(name)  ?: emptyList()
+        } else {
+            emptyList()
+        }
     }
 }

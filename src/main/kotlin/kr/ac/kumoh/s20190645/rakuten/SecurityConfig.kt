@@ -27,7 +27,7 @@ class SecurityConfig {
         http.
             csrf {
                 it.csrfTokenRepository(csrfTokenRepository())
-                    .ignoringRequestMatchers("/login")
+                    .ignoringRequestMatchers("/login","/search")
             }
             .authorizeHttpRequests {
                 it
@@ -59,7 +59,7 @@ class SecurityConfig {
 
     @Bean
     fun csrfTokenRepository(): CsrfTokenRepository {
-        val repository: HttpSessionCsrfTokenRepository = HttpSessionCsrfTokenRepository()
+        val repository = HttpSessionCsrfTokenRepository()
         repository.setHeaderName("X-XSRF-TOKEN")
         return repository
     }

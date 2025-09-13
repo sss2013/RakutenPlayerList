@@ -66,4 +66,8 @@ class PlayerService(private val playerRepository: PlayerRepository) {
         val kanjiRegex = Regex("[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]+$")
         return kanjiRegex.matches(text)
     }
+
+    fun searchPlayer(name:String): List<Player>? {
+        return playerRepository.searchName(name)
+    }
 }
