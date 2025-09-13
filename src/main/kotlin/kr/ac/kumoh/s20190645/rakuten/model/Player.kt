@@ -3,7 +3,7 @@ package kr.ac.kumoh.s20190645.rakuten.model
 import jakarta.persistence.*
 
 @Entity
-data class Player(
+class Player(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
     var name: String?,

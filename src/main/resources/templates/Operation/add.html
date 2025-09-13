@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>Add Player</title>
     <link href="/input.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="~{ Normal/nav.html :: navbar }"></div>
+
 <form action="/playerAdd" method="POST">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 

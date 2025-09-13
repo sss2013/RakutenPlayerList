@@ -8,7 +8,7 @@
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
 <div class="box" th:if="${players != null}" th:each="player : ${players}">
-    <a th:href="@{/info/{backNumber}(backNumber=${player.backNumber})}">
+    <a th:href="@{/playerInfo/{backNumber}(backNumber=${player.backNumber})}">
         <img th:src="${player.src}" alt="player's image">
     </a>
     <div>

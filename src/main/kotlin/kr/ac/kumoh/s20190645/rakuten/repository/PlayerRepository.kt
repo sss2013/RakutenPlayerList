@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PlayerRepository : JpaRepository<Player,Long> {
     fun findByBackNumber(backNumber: Int?) : Player?
-    fun deleteByBackNumber(backNumber: Int?) : Player?
+    fun deleteByBackNumber(backNumber: Int?) : Int?
     fun findAllByOrderByBackNumberAsc(pageable : Pageable): Page<Player>
 }

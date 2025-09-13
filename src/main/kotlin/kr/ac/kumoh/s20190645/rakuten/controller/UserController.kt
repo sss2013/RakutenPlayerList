@@ -12,15 +12,15 @@ class UserController (
     private val userService : UserService
 ) {
 
-    @GetMapping("/signIn")
-    fun signIn(auth: Authentication?): String {
+    @GetMapping("/signUp")
+    fun signUp(auth: Authentication?): String {
         if (auth?.isAuthenticated == true)
-            return "redirect:Normal/list"
+            return "redirect:/Normal/list"
 
-        return "Normal/signIn"
+        return "Normal/SignUp"
     }
 
-    @PostMapping("/infoInput")
+    @PostMapping("/signUpPost")
     @ResponseBody
     fun signCheck(@RequestParam params:Map<String,String>): String{
         val username = params["username"] ?: return "IDは必須です"
@@ -38,16 +38,16 @@ class UserController (
     @GetMapping("/my-page")
     fun myPage(auth : Authentication,model: Model) :String{
         if (!auth.isAuthenticated)
-            return "Normal/list"
+            return "redirect:/Normal/list"
 
         val userDetails = auth.principal as MyUserDetails
         model.addAttribute("nickName",userDetails.nickname)
-        return "Operation/myPage"
+        return "Operation/MyPage"
     }
 
     @GetMapping("/access-denied")
     fun accessDenied() : String {
-        return "Normal/accessDenied"
+        return "Normal/AccessDenied"
     }
 
     @GetMapping("/user/{number}")
@@ -56,9 +56,10 @@ class UserController (
         val user = userService.getUser(number)
         return UserData(user?.username ?: "", user?.nickname ?: "")
     }
-}
 
-data class UserData(
-    val username: String = "",
-    val nickname: String = ""
-)
+
+    data class UserData(
+        val username: String = "",
+        val nickname: String = ""
+    )
+}

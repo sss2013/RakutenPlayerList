@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title th:text="${player.name}"></title>
     <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
-<button class="btn">選手削除</button>
+<button class="delete-player" sec:authorize="hasRole('ADMIN')">選手削除</button>
 <div class="box">
     <div>
         <img th:src="${player.src}" alt="players'image"/>
@@ -18,16 +20,24 @@
         </a>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
-    document.querySelectorAll('.btn')[0].addEventListener('click', function () {
+    $('.delete-player').on('click',function(){
         const confirmed = window.confirm("本当に削除してもよろしいですか？");
         if (!confirmed) return;
 
-        const playerNumber = document.querySelectorAll('.number')[0].textContent;
+        const csrfToken = $('meta[name="_csrf"]').attr('content');
+        const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+        const playerNumber = Number($('.number').html());
+
         fetch('/delete', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]:csrfToken
+            },
             body: JSON.stringify({playerNumber: playerNumber})
         })
             .then(response => response.text())
@@ -36,5 +46,6 @@
             })
     })
 </script>
+
 </body>
 </html>

@@ -53,17 +53,16 @@ class PlayerService(private val playerRepository: PlayerRepository) {
 
 
     @Transactional
-    fun deletePlayer(backNumber: Int?) : Int {
-        if (findPlayer(backNumber) != null) {
+    fun deletePlayer(backNumber: Int?) : Int? {
+        return if (findPlayer(backNumber) != null) {
             playerRepository.deleteByBackNumber(backNumber)
-            return 1
         } else{
-            return 0
+            0
         }
     }
 
     fun isOnlyKanji(text: String): Boolean {
-        val kanjiRegex = Regex("[\u4E00-\u9FFF]+$")
+        val kanjiRegex = Regex("[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]+$")
         return kanjiRegex.matches(text)
     }
 }

@@ -2,8 +2,6 @@ package kr.ac.kumoh.s20190645.rakuten.controller
 
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
-import org.slf4j.LoggerFactory
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
@@ -28,11 +26,11 @@ class PlayerController(
     }
 
     @GetMapping("/list/{curr}")
-    fun listByPage(model:Model, @PathVariable curr:Int) : String{
-        val result=playerService.findPlayerIndexed(curr)
+    fun listByPage(model: Model, @PathVariable curr: Int): String {
+        val result = playerService.findPlayerIndexed(curr)
 
-        model.addAttribute("page",curr)
-        model.addAttribute("totalPages",result.totalPages)
+        model.addAttribute("page", curr)
+        model.addAttribute("totalPages", result.totalPages)
         model.addAttribute("players", result.content)
         return "Normal/listPage"
     }
@@ -44,11 +42,11 @@ class PlayerController(
         return "Normal/random"
     }
 
-    @GetMapping("/info/{backNumber}")
+    @GetMapping("/playerInfo/{backNumber}")
     fun info(model: Model, @PathVariable backNumber: Int): String {
         val result = playerService.findPlayer(backNumber)
         model.addAttribute("player", result)
-        return "Normal/info"
+        return "Normal/playerInfo"
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -61,9 +59,11 @@ class PlayerController(
     @PostMapping("/playerAdd")
     fun addPlayer(model: Model, @RequestParam params: Map<String, String>, auth: Authentication): String {
         val name = params["name"] ?: "unknown"
+        print(name);
         val backNumber = params["backNumber"]?.toIntOrNull()
         val who = auth.principal as MyUserDetails
-        val addResult = playerService.addPlayer(name, backNumber,who.nickname)
+
+        val addResult = playerService.addPlayer(name, backNumber, who.nickname)
         model.addAttribute("result", addResult)
         return "Operation/addResult"
     }
@@ -92,13 +92,13 @@ class PlayerController(
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete")
     @ResponseBody
-    fun deletePlayer(@RequestBody params: Map<String, String>,auth: Authentication): String {
+    fun deletePlayer(@RequestBody params: Map<String, String>, auth: Authentication): String {
         if (auth.authorities.none { it.authority == "ROLE_ADMIN" }) {
-            return "/access-denied"
+            return "Normal/AccessDenied"
         }
         val number = params["playerNumber"]?.toIntOrNull()
         if (playerService.deletePlayer(number) != 1)
-            return "/info/${number}"
+            return "playerInfo/${number}"
         return "/list"
     }
 }

@@ -4,45 +4,57 @@
     <meta charset="UTF-8">
     <title>会員登録</title>
     <link href="/input.css" rel="stylesheet">
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+
 <body>
-<div th:text="会員登録"></div>
+<div th:text="会員登録" style="font-size: 24px; font-weight:bold"></div>
 <form id="signup-form">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     <div>
-    <input type="text" name="username" placeholder="ID">
+        <input type="text" name="username" placeholder="ID">
         <p class="description">IDは英語と数字を含めて５文字以上にしてください</p>
     </div>
     <div>
-    <input type="password" name="password" placeholder="パスワード">
+        <input type="password" name="password" placeholder="パスワード">
         <p class="description">パスワードは英語と数字、記号を含めて８文字以上にしてください</p>
     </div>
     <div>
-    <input type="text" name="nickname" placeholder="ニックネーム">
+        <input type="text" name="nickname" placeholder="ニックネーム">
         <p class="description">ニックネームは３文字以上にしてください</p>
     </div>
     <div>
-    <button type="submit">登録</button>
+        <button type="submit">登録</button>
     </div>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
-    document.getElementById("signup-form").addEventListener("submit", async function (e) {
+    $('#signup-form').on("submit", async function (e) {
         e.preventDefault();
+
+        const csrfToken = $('meta[name="_csrf"]').attr("content");
+        const csrfHeaderName = $('meta[name="_csrf_header"]').attr("content");
 
         const formData = new FormData(this);
 
         try {
-            const response = await fetch("/infoInput", {
+            const response = await fetch("/signUpPost", {
                 method: "POST",
+                headers: {
+                    [csrfHeaderName]: csrfToken
+                },
+                credentials: "same-origin",
                 body: formData
             });
 
             const result = await response.text();
 
-            if (result==="ok") {
-                window.location.href="/login";
+            if (result === "ok") {
+                window.location.href = "/login";
             } else {
                 alert(result);
             }
@@ -50,7 +62,8 @@
             console.error("エラー発生", error);
             alert("サーバーエラーが発生しました");
         }
-    });
+    })
 </script>
+
 </body>
 </html>

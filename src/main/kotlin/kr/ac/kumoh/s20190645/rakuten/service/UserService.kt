@@ -6,14 +6,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(private val userRepository: UserRepository, val encoder : BCryptPasswordEncoder ) {
+class UserService(private val userRepository: UserRepository, val encoder: BCryptPasswordEncoder) {
 
     fun addUser(userName: String, passWord: String, nickName: String): String {
         if (!isValidId(userName)) {
             return "IDは英語と数字を含めて５文字以上にしてください"
         }
 
-        if (!isContainsAdmin(userName)){
+        if (!isContainsAdmin(userName)) {
             return "IDに不適切な文字が含まれています"
         }
 
@@ -34,7 +34,7 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
 
         val lastNumber = userRepository.findMaxNumber() ?: 0
 
-        userRepository.save(User(null, userName, encoder.encode(passWord), nickName,lastNumber+1))
+        userRepository.save(User(null, userName, encoder.encode(passWord), nickName, lastNumber + 1))
         return "ok"
     }
 
@@ -45,7 +45,7 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
 
     fun isDuplicateNickname(nickName: String): Boolean {
         val found = userRepository.findByNickname(nickName)?.nickname
-        return found!=null
+        return found != null
     }
 
     fun isValidNickname(nickName: String): String {
@@ -63,7 +63,7 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
         return regex.matches(id)
     }
 
-    fun isContainsAdmin(id:String) : Boolean{
+    fun isContainsAdmin(id: String): Boolean {
         return !id.contains("admin")
     }
 
@@ -76,7 +76,7 @@ class UserService(private val userRepository: UserRepository, val encoder : BCry
         return length && hasLetter && hasDigit && hasSpecial
     }
 
-    fun getUser(number: Long?): User?{
+    fun getUser(number: Long?): User? {
         val found = userRepository.findByNumber(number) ?: return null
         return found
     }
