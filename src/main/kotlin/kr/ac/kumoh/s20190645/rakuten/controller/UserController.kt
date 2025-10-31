@@ -2,7 +2,8 @@ package kr.ac.kumoh.s20190645.rakuten.controller
 
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.UserService
-import org.springframework.security.core.Authentication
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -13,9 +14,9 @@ class UserController (
 ) {
 
     @GetMapping("/signUp")
-    fun signUp(auth: Authentication?): String {
-        if (auth?.isAuthenticated == true)
-            return "redirect:/Normal/list"
+    fun signUp(@AuthenticationPrincipal auth: MyUserDetails?): String {
+        if (auth != null)
+            return "redirect:/list"
 
         return "Normal/SignUp"
     }
@@ -36,12 +37,11 @@ class UserController (
     }
 
     @GetMapping("/my-page")
-    fun myPage(auth : Authentication,model: Model) :String{
-        if (!auth.isAuthenticated)
-            return "redirect:/Normal/list"
+    fun myPage(@AuthenticationPrincipal auth : MyUserDetails?, model: Model) :String{
+        if (auth == null)
+            return "redirect:/list"
 
-        val userDetails = auth.principal as MyUserDetails
-        model.addAttribute("nickName",userDetails.nickname)
+        model.addAttribute("nickName", auth.nickname)
         return "Operation/MyPage"
     }
 
@@ -55,6 +55,16 @@ class UserController (
     fun getUser(@PathVariable number:Long?): UserData {
         val user = userService.getUser(number)
         return UserData(user?.username ?: "", user?.nickname ?: "")
+    }
+
+    @GetMapping("/check-login")
+    @ResponseBody
+    fun checkLogin(@AuthenticationPrincipal user: MyUserDetails?) : ResponseEntity<Map<String, Any>> {
+        return if (user == null){
+            ResponseEntity.ok(mapOf("loggedIn" to false))
+        } else {
+            ResponseEntity.ok(mapOf("loggedIn" to true,"username" to user.username))
+        }
     }
 
     data class UserData(

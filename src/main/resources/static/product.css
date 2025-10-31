@@ -1,0 +1,99 @@
+.box {
+    margin: 30px auto;
+    display: flex;
+}
+
+.box img {
+    width: 150px;
+    margin-right: 20px;
+}
+
+.nav-title {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 10px; /* 이미지와 글자 사이 여백 */
+    padding: 10px;
+}
+
+.nav-title > .nav-name {
+    font-size: 30px;
+    letter-spacing: 5px;
+    color: darkred;
+}
+
+.nav-title > .nav-logo{
+    width: 20%;
+}
+
+input, button {
+    padding: 8px 13px;
+    margin-top: 5px;
+    border: 1px solid grey;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+button {
+    background: black;
+    color: white;
+    border: none;
+}
+
+button:hover{
+    transform:scale(1.1);
+    transition:all 0.4s ease;
+}
+
+input {
+    display: block;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    list-style: none;
+}
+
+.pagination li {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination .active a {
+    background-color: #007bff;
+    color: white;
+    pointer-events: none;
+    border-color: #007bff;
+}
+
+.pagination .disabled a {
+    color: #ccc;
+    pointer-events: none;
+    border-color: #eee;
+}
+
+.control > button {
+    margin: 10px;
+}
+
+.control > span{
+    margin : 10px 50px;
+    font-size: 24px;
+}

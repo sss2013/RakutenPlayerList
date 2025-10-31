@@ -2,26 +2,36 @@ package kr.ac.kumoh.s20190645.rakuten.service
 
 import kr.ac.kumoh.s20190645.rakuten.model.Player
 import kr.ac.kumoh.s20190645.rakuten.repository.PlayerRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import software.amazon.awssdk.services.s3.presigner.S3Presigner
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest
+import java.time.Duration
 
 @Service
-class PlayerService(private val playerRepository: PlayerRepository) {
+class PlayerService(
+    private val playerRepository: PlayerRepository,
+    @param:Value("\${spring.cloud.aws.s3.bucket}")
+    private val bucket : String,
+    private val s3Presigner : S3Presigner,
+) {
     fun findAllPlayer() = playerRepository.findAll()
     fun findRandom() = playerRepository.findAll().random()
     fun findPlayer(backNumber: Int?): Player? {
         return playerRepository.findByBackNumber(backNumber)
     }
 
-    fun addPlayer(name: String, backNumber: Int?,who:String,url:String): String? {
+    fun addPlayer(name: String, backNumber: Int?, who: String, url: String): String? {
         if (backNumber != null && (backNumber < 0 || backNumber > 150)) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
-        if (findPlayer(backNumber)!=null)
+        if (findPlayer(backNumber) != null)
             return "選手名、または背番号がすでに存在しています"
-        if (url =="unknown")
+        if (url == "unknown")
             return "URLが正しくありません"
 
         playerRepository.save(
@@ -48,16 +58,16 @@ class PlayerService(private val playerRepository: PlayerRepository) {
     }
 
     fun findPlayerIndexed(number: Int): Page<Player> {
-        val pageable: Pageable = PageRequest.of(number,5)
+        val pageable: Pageable = PageRequest.of(number, 5)
         return playerRepository.findAllByOrderByBackNumberAsc(pageable)
     }
 
 
     @Transactional
-    fun deletePlayer(backNumber: Int?) : Int? {
+    fun deletePlayer(backNumber: Int?): Int? {
         return if (findPlayer(backNumber) != null) {
             playerRepository.deleteByBackNumber(backNumber)
-        } else{
+        } else {
             0
         }
     }
@@ -67,7 +77,19 @@ class PlayerService(private val playerRepository: PlayerRepository) {
         return kanjiRegex.matches(text)
     }
 
-    fun searchPlayer(name:String): List<Player>? {
+    fun searchPlayer(name: String): List<Player>? {
         return playerRepository.searchName(name)
+    }
+
+    fun createPresignedUrl(path: String): String {
+        val putObjectRequest = PutObjectRequest.builder()
+            .bucket(bucket)
+            .key(path)
+            .build()
+        val preSignRequest = PutObjectPresignRequest.builder()
+            .signatureDuration(Duration.ofMinutes(3))
+            .putObjectRequest(putObjectRequest)
+            .build()
+        return s3Presigner.presignPutObject(preSignRequest).url().toString()
     }
 }

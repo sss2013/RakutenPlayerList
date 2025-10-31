@@ -3,7 +3,6 @@ package kr.ac.kumoh.s20190645.rakuten.controller
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.model.Player
 import kr.ac.kumoh.s20190645.rakuten.service.PlayerService
-import kr.ac.kumoh.s20190645.rakuten.service.S3Service
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*
 @Controller
 class PlayerController(
     private val playerService: PlayerService,
-    private val s3Service:S3Service,
 ) {
 
     @GetMapping("/")
@@ -108,7 +106,7 @@ class PlayerController(
     @GetMapping("/presigned-url")
     @ResponseBody
     fun getURL(@RequestParam filename: String): String{
-        val result = s3Service.createPresignedUrl("test/$filename" )
+        val result = playerService.createPresignedUrl("test/$filename" )
         return result
     }
 

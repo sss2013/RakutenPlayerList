@@ -10,6 +10,7 @@
         <a th:href="@{/list/0}">選手リスト（ページ別）</a>
         <a th:href="@{/login}" sec:authorize="!isAuthenticated()">ログイン</a>
         <a th:href="@{/add}" sec:authorize="hasRole('ADMIN')">選手追加</a>
+        <a th:href="@{/products}">グッズ</a>
         <a th:href="@{/my-page}" sec:authorize="isAuthenticated()">マイページ</a>
         <a th:href="@{/signUp}"  sec:authorize="!isAuthenticated()">会員登録</a>
         <span th:if="${#authentication.principal != 'anonymousUser'}"

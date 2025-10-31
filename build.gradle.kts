@@ -37,6 +37,7 @@ repositories {
         implementation("org.springframework.session:spring-session-core")
         implementation("org.springframework.session:spring-session-jdbc")
         implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1")
+        implementation("software.amazon.awssdk:apache-client:2.21.46")
 
     }
 
