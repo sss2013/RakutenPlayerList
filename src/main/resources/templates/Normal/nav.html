@@ -1,23 +1,35 @@
 <div th:fragment="navbar" xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <div class="nav-title">
-        <img class="nav-logo" src="https://www.rakuteneagles.jp/media/sites/3/common/logo.svg"
-             alt="rakuten eagles logo"/>
-        <a class="nav-name">楽天イーグルス</a>
-    </div>
-    <div class="nav-column">
-        <a th:href="@{/list}">選手一覧</a>
-        <a th:href="@{/list/0}">選手リスト（ページ別）</a>
-        <a th:href="@{/login}" sec:authorize="!isAuthenticated()">ログイン</a>
-        <a th:href="@{/add}" sec:authorize="hasRole('ADMIN')">選手追加</a>
-        <a th:href="@{/products}">グッズ</a>
-        <a th:href="@{/my-page}" sec:authorize="isAuthenticated()">マイページ</a>
-        <a th:href="@{/signUp}"  sec:authorize="!isAuthenticated()">会員登録</a>
-        <span th:if="${#authentication.principal != 'anonymousUser'}"
-              th:text="${#authentication.principal.nickname}"></span>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" sec:authorize="isAuthenticated()">ログアウト</button>
-        </form>
+    <div class="top-accent"></div>
 
-    </div>
+    <nav class="main-navbar">
+        <div class="nav-left">
+            <a th:href="@{/}" class="brand">
+                <img class="nav-logo" src="https://www.rakuteneagles.jp/media/sites/3/common/logo.svg"
+                     alt="rakuten eagles logo"/>
+                <span class="nav-name">楽天イーグルス</span>
+            </a>
+        </div>
+
+        <button class="nav-toggle" aria-label="메뉴 토글" onclick="document.body.classList.toggle('nav-open')">
+            &#9776;
+        </button>
+
+        <div class="nav-column">
+            <a th:href="@{/list}">選手一覧</a>
+            <a th:href="@{/list/0}">選手リスト（ページ別）</a>
+            <a th:href="@{/products}">グッズ</a>
+            <a th:href="@{/my-page}" sec:authorize="isAuthenticated()">マイページ</a>
+            <a th:href="@{/add}" sec:authorize="hasRole('ADMIN')">選手追加</a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()">ログイン</a>
+            <a th:href="@{/signUp}" sec:authorize="!isAuthenticated()">会員登録</a>
+
+            <span class="nav-username" th:if="${#authentication.principal != 'anonymousUser'}"
+                  th:text="${#authentication.principal.nickname}"></span>
+
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" sec:authorize="isAuthenticated()" class="logout-btn">ログアウト</button>
+            </form>
+        </div>
+    </nav>
 </div>

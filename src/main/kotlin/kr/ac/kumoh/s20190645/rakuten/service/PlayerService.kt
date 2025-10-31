@@ -73,8 +73,9 @@ class PlayerService(
     }
 
     fun isOnlyKanji(text: String): Boolean {
-        val kanjiRegex = Regex("[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]+$")
-        return kanjiRegex.matches(text)
+        val kanjiRange = "[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]"
+        val regex = Regex("^$kanjiRange+(?:[ \u3000]$kanjiRange+)*$")
+        return regex.matches(text)
     }
 
     fun searchPlayer(name: String): List<Player>? {
