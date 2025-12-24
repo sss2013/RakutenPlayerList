@@ -12,16 +12,6 @@
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
 
-<!--<div>-->
-<!--    <p>フルネームで検索する場合、苗字と名前の間に空白を入れてください</p>-->
-<!--    <div style="display: flex ; flex-wrap:wrap">-->
-<!--        <label>-->
-<!--            <input id="searchInput" placeholder="選手検索">-->
-<!--        </label>-->
-<!--        <button class="search-button">検索</button>-->
-<!--    </div>-->
-<!--</div>-->
-
 <div class="product-list">
     <div class="box" th:if="${products != null}" th:each="product : ${products}">
         <a th:href="@{/products/{id}(id=${product.id})}">
@@ -29,11 +19,11 @@
         </a>
         <div>
             <h4 th:text="${product.name}"></h4>
-            <p th:text="${product.price}"></p>
+            <p th:text="${#numbers.formatDecimal(product.price,0,'COMMA',0,'COMMA')} + ' 円'"></p>
         </div>
     </div>
     <div th:if="${products == null}">
-        <p>選手情報がありません</p>
+        <p>商品情報がありません</p>
     </div>
 </div>
 

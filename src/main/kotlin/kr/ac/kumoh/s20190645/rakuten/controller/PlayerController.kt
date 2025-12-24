@@ -69,7 +69,6 @@ class PlayerController(
         return "Operation/addResult"
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{backNumber}")
     fun updateForm(model: Model, @PathVariable backNumber: Int): String {

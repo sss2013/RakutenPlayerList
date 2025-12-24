@@ -23,7 +23,9 @@
     <div>
         <div>
             <h4 id="productName" th:text="${product.name}"></h4>
-            <h4 id="price" th:text="${product.price}">円</h4>
+            <h4 id="price" th:text="${product.price}" style="display:none"></h4>
+            <p th:text="${#numbers.formatDecimal(product.price,0,'COMMA',0,'COMMA')} + ' 円'"></p>
+
             <span id="productNumber" th:text="${product.id}" style="display:none"></span>
 
             <h4> 注文 </h4>
@@ -33,15 +35,13 @@
                 <button class="btn btn-primary" type="button" data-id="plus">+</button>
             </div>
 
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="button" data-id="buy">購入する</button>
-                <button class="btn btn-primary" type="button" data-id="cart">カートに入れる</button>
-                <h4>合計金額 : <span class="sum"></span></h4>
-            </div>
-
             <span class="username" sec:authorize="isAuthenticated()" sec:authentication="principal.username"
                   style="display:none"></span>
-
+        </div>
+        <div class="order" style="display: flex; flex-direction: column; width: 250px">
+            <button class="btn btn-primary" type="button" data-id="buy">購入する</button>
+            <button class="btn btn-primary" type="button" data-id="cart">カートに入れる</button>
+            <h4>合計金額 : <span class="sum">0</span> 円</h4>
         </div>
     </div>
 </div>
@@ -50,33 +50,81 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
     let count = Number($('.count').html());
-    const price = Number($('.price').html());
+    const price = Number($('#price').html());
+    const productId = Number($('#productNumber').html());
+    const csrfToken = $('meta[name="_csrf"]').attr('content');
+    const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+    const checkLoginStatus = async () => {
+        const response = await fetch("/check-login", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader] : csrfToken
+            }
+        })
 
+        if (response.ok) {
+            return response.body["username"]
+        } else {
+            return false
+        }
+    }
     $('[data-id="minus"]').on('click', function(){
-        if (count<=1)
+        if (count<=0)
             return;
 
         count--;
         $('.count').html(count);
+        $('.sum').html(count * price);
     })
+
     $('[data-id="plus"]').on('click', function(){
         count++;
         $('.count').html(count);
-        $('.sum').html(count * price)
+        $('.sum').html(count * price);
     })
 
     $('[data-id="buy"]').on('click', async function(){
-        const res = await fetch ("/check-login",{credentials : 'include'});
-        const json = await res.json();
-        console.log(json);
+        if (count === 0) {
+            alert('1個以上選んでください');
+            return;
+        }
+
+        const isAuthenticated = await checkLoginStatus();
+        if (!isAuthenticated) {
+            alert('ログインしてください');
+            return;
+        }
 
         const confirm = window.confirm('本当に購入しますか？')
         if (!confirm) return;
 
-        await fetch('/orderProduct',{
+        const payload = {
+            productId : productId,
+            quantity : count,
+            pricePerUnit : price,
+        }
+
+        const orderRes = await fetch("/orderProduct",{
             method: 'POST',
-            body: JSON.stringify({})
-        })
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]:csrfToken
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (orderRes.ok) {
+            const body = await orderRes.json();
+            alert('購入が完了しました');
+            console.log(body);
+        } else {
+            const text = await orderRes.text();
+            console.error('order failed', orderRes.status, text);
+            alert('購入に失敗しました: ' + orderRes.status);
+        }
 
     })
 </script>

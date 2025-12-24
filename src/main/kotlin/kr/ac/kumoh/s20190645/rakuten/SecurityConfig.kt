@@ -23,12 +23,12 @@ class SecurityConfig {
     }
 
     @Bean
+    @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.
-            csrf {
-                it.csrfTokenRepository(csrfTokenRepository())
-                    .ignoringRequestMatchers("/login","/search")
-            }
+        http.csrf {
+            it.csrfTokenRepository(csrfTokenRepository())
+                .ignoringRequestMatchers("/login", "/search")
+        }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/Operation/**")
@@ -43,7 +43,11 @@ class SecurityConfig {
                     .defaultSuccessUrl("/list")
                     .permitAll()
             }
-            .logout { it.logoutUrl("/logout") }
+            .logout {
+                it.logoutUrl("/logout")
+                    .logoutSuccessUrl("/logout-success")
+                    .invalidateHttpSession(true)
+            }
             .exceptionHandling { exceptions ->
                 exceptions.accessDeniedHandler(customDeniedHandler())
             }

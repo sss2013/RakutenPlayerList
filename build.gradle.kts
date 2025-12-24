@@ -28,7 +28,7 @@ repositories {
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-        implementation("com.microsoft.sqlserver:mssql-jdbc:8.4.1.jre8")
+        implementation("com.microsoft.sqlserver:mssql-jdbc:13.2.1.jre11")
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-jdbc")
         implementation("org.jboss.logging:jboss-logging:3.5.0.Final")

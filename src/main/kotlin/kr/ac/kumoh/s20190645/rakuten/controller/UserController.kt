@@ -2,13 +2,16 @@ package kr.ac.kumoh.s20190645.rakuten.controller
 
 import kr.ac.kumoh.s20190645.rakuten.model.MyUserDetails
 import kr.ac.kumoh.s20190645.rakuten.service.UserService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
+@RestController
 class UserController (
     private val userService : UserService
 ) {
@@ -18,7 +21,7 @@ class UserController (
         if (auth != null)
             return "redirect:/list"
 
-        return "Normal/SignUp"
+        return "signUp"
     }
 
     @PostMapping("/signUpPost")
@@ -50,6 +53,11 @@ class UserController (
         return "Normal/AccessDenied"
     }
 
+    @GetMapping("/logout-success")
+    fun logoutSuccessUrl() : String {
+        return "Normal/index"
+    }
+
     @GetMapping("/user/{number}")
     @ResponseBody
     fun getUser(@PathVariable number:Long?): UserData {
@@ -58,12 +66,12 @@ class UserController (
     }
 
     @GetMapping("/check-login")
-    @ResponseBody
-    fun checkLogin(@AuthenticationPrincipal user: MyUserDetails?) : ResponseEntity<Map<String, Any>> {
-        return if (user == null){
-            ResponseEntity.ok(mapOf("loggedIn" to false))
+    fun checkLogin(authentication: Authentication?) : ResponseEntity<Map<String, Any>> {
+        return if(authentication == null || !authentication.isAuthenticated){
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mapOf("status" to false))
         } else {
-            ResponseEntity.ok(mapOf("loggedIn" to true,"username" to user.username))
+            val username = authentication.name
+            ResponseEntity.ok(mapOf("status" to true,"username" to username))
         }
     }
 
