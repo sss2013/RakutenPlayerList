@@ -2,18 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ランダム選手</title>
     <link href="/main.css" rel="stylesheet">
     <link href="/navbar.css" rel="stylesheet">
-
+    <link href="/card.css" rel="stylesheet">
 </head>
 <body>
-<div class="box">
-    <div th:replace="~{ Normal/nav.html :: navbar }"></div>
-    <div>
-        <img th:src="${player.src}" alt="players'image"/>
-        <h4 th:text="${player.name}"></h4>
-        <p th:text="${player.backNumber}"></p>
+<div th:replace="~{ Normal/nav.html :: navbar }"></div>
+
+<div class="page-wrapper">
+    <div class="player-detail">
+        <div>
+            <img class="player-detail-img" th:src="${player.src}" alt="players'image"/>
+        </div>
+        <div class="player-detail-info">
+            <h2 class="player-detail-name" th:text="${player.name}"></h2>
+            <p class="player-detail-number"># <span th:text="${player.backNumber}"></span></p>
+        </div>
     </div>
 </div>
 </body>

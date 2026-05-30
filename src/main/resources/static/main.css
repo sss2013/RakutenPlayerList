@@ -1,90 +1,187 @@
-    .box {
-        margin: 30px auto;
-        display: flex;
-    }
+:root {
+    --color-primary: #7b0008;
+    --color-primary-hover: #a00010;
+    --color-black: #000;
+    --color-white: #fff;
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e0e0e0;
+    --color-gray-600: #666;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.10);
+    --shadow-card-hover: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
 
-    .box img {
-        width: 150px;
-        margin-right: 20px;
-    }
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
-    .nav-title {
-        display: flex;
-        justify-content: center; /* 수평 가운데 정렬 */
-        align-items: center; /* 수직 가운데 정렬 */
-        gap: 10px; /* 이미지와 글자 사이 여백 */
-        padding: 10px;
-    }
+body {
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Yu Gothic", sans-serif;
+    color: #222;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #fafafa;
+}
 
-    .nav-title > .nav-name {
-        font-size: 30px;
-        letter-spacing: 5px;
-        color: darkred;
-    }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-    .nav-title > .nav-logo{
-        width: 20%;
-    }
+.page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
 
-    input, button {
-        padding: 8px 13px;
-        margin-top: 5px;
-        border: 1px solid grey;
-        border-radius: 4px;
-        vertical-align: middle;
-    }
+.page-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    border-left: 4px solid var(--color-primary);
+    padding-left: 12px;
+    margin-bottom: 20px;
+}
 
-    button {
-        background: black;
-        color: white;
-        border: none;
-    }
+/* 홈 히어로 섹션 */
+.page-hero {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    margin: 40px auto;
+    max-width: 760px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
 
-    button:hover{
-        transform:scale(1.1);
-        transition:all 0.4s ease;
-    }
+.page-hero h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+}
 
-    input {
-        display: block;
-    }
+.page-hero h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
 
-     .pagination {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-      list-style: none;
-    }
+.page-hero h3 {
+    font-size: 14px;
+    color: var(--color-gray-600);
+    margin-bottom: 8px;
+}
 
-    .pagination li {
-      margin: 0 5px;
-      cursor: pointer;
-    }
+.page-hero p {
+    font-size: 13px;
+    color: #999;
+}
 
-    .pagination a {
-      display: block;
-      padding: 8px 12px;
-      text-decoration: none;
-      color: #007bff;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      transition: background-color 0.3s, color 0.3s;
-    }
+/* 결과/안내 페이지 */
+.result-container {
+    text-align: center;
+    padding: 80px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+}
 
-    .pagination a:hover {
-      background-color: #007bff;
-      color: white;
-    }
+.result-container h4 {
+    font-size: 18px;
+    color: #333;
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+}
 
-    .pagination .active a {
-      background-color: #007bff;
-      color: white;
-      pointer-events: none;
-      border-color: #007bff;
-    }
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+    align-items: center;
+}
 
-    .pagination .disabled a {
-      color: #ccc;
-      pointer-events: none;
-      border-color: #eee;
-    }
+.search-bar input {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* 선수 그리드 */
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 20px;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    list-style: none;
+    margin: 0;
+    gap: 4px;
+}
+
+.pagination li {
+    cursor: pointer;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 14px;
+    text-decoration: none;
+    color: var(--color-primary);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.pagination .active a {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    pointer-events: none;
+    border-color: var(--color-primary);
+}
+
+.pagination .disabled a {
+    color: #ccc;
+    pointer-events: none;
+    border-color: #eee;
+}
+
+/* 유틸리티 */
+.hidden {
+    display: none !important;
+}
+
+/* nav-title (홈 로고 영역, 레거시 지원) */
+.nav-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.nav-title > .nav-name {
+    font-size: 30px;
+    letter-spacing: 5px;
+    color: darkred;
+}
+
+.nav-title > .nav-logo {
+    width: 20%;
+}

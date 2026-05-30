@@ -16,9 +16,8 @@ import java.time.Duration
 @Service
 class PlayerService(
     private val playerRepository: PlayerRepository,
-    @param:Value("\${spring.cloud.aws.s3.bucket}")
-    private val bucket : String,
-    private val s3Presigner : S3Presigner,
+    @Value("\${spring.cloud.aws.s3.bucket}") private val bucket: String,
+    private val s3Presigner : S3Presigner
 ) {
     fun findAllPlayer() = playerRepository.findAll()
     fun findRandom() = playerRepository.findAll().random()
@@ -27,7 +26,7 @@ class PlayerService(
     }
 
     fun addPlayer(name: String, backNumber: Int?, who: String, url: String): String? {
-        if (backNumber != null && (backNumber < 0 || backNumber > 150)) return "背番号は０から１５０までです．"
+        if (backNumber != null && (backNumber !in 0..150)) return "背番号は０から１５０までです．"
         if (!isOnlyKanji(name)) return "名前は漢字のみ入力してください"
         if (findPlayer(backNumber) != null)
             return "選手名、または背番号がすでに存在しています"

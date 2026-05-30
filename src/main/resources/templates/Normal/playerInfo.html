@@ -5,47 +5,81 @@
     <title th:text="${player.name}"></title>
     <link href="/main.css" rel="stylesheet">
     <link href="/navbar.css" rel="stylesheet">
+    <link href="/card.css" rel="stylesheet">
+    <link href="/form.css" rel="stylesheet">
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
-<button class="delete-player" sec:authorize="hasRole('ADMIN')">選手削除</button>
-<div class="box">
-    <div>
-        <img th:src="${player.src}" alt="players'image"/>
-        <h4 th:text="${player.name}"></h4>
-        <p class="number" th:text="${player.backNumber}"></p>
-        <a th:href="@{/update/{backNumber}(backNumber=${player.backNumber})}">
-            <button th:text="選手情報更新"></button>
-        </a>
+
+<div class="page-wrapper">
+    <div class="player-detail">
+        <div>
+            <img class="player-detail-img" th:src="${player.src}" alt="players'image"/>
+        </div>
+        <div class="player-detail-info">
+            <h2 class="player-detail-name" th:text="${player.name}"></h2>
+            <p class="player-detail-number"># <span class="number" th:text="${player.backNumber}"></span></p>
+
+            <div class="player-actions">
+                <a th:href="@{/update/{backNumber}(backNumber=${player.backNumber})}">
+                    <button class="btn btn-dark">選手情報更新</button>
+                </a>
+                <button class="btn btn-outline like">
+                    <span>&#9825;</span>&nbsp;好きな選手登録
+                </button>
+                <button class="btn btn-primary delete-player" sec:authorize="hasRole('ADMIN')">選手削除</button>
+            </div>
+        </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
-    $('.delete-player').on('click',function(){
+    const csrfToken = $('meta[name="_csrf"]').attr('content');
+    const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+    const playerNumber = Number($('.number').html());
+
+    $('.delete-player').on('click', function () {
         const confirmed = window.confirm("本当に削除してもよろしいですか？");
         if (!confirmed) return;
-
-        const csrfToken = $('meta[name="_csrf"]').attr('content');
-        const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-
-        const playerNumber = Number($('.number').html());
 
         fetch('/delete', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]:csrfToken
+                [csrfHeader]: csrfToken
             },
             body: JSON.stringify({playerNumber: playerNumber})
         })
             .then(response => response.text())
-            .then (url=>{
-                window.location.href=url;
+            .then(url => {
+                window.location.href = url;
             })
+    })
+
+    const handleLikeClick = async (playerNumber) => {
+        try {
+            const response = await fetch(`like/${playerNumber}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    [csrfHeader]: csrfToken
+                }
+            })
+
+            if (response.ok){
+            }
+        } catch (error) {
+            console.error("リクエスト失敗: ", error);
+        }
+    }
+
+    $('.like').on('click', function () {
+
     })
 </script>
 

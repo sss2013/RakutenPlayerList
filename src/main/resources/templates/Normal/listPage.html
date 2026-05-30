@@ -5,42 +5,45 @@
     <title>Player</title>
     <link href="/main.css" rel="stylesheet">
     <link href="/navbar.css" rel="stylesheet">
-
+    <link href="/card.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
-<div class="box" th:if="${players != null}" th:each="player : ${players}">
-    <a th:href="@{/playerInfo/{backNumber}(backNumber=${player.backNumber})}">
-        <img th:src="${player.src}" alt="player's image">
-    </a>
-    <div>
-        <h4 th:text="${player.name}"></h4>
-        <p th:text="${player.backNumber}"></p>
-        <p>追加した人：<span th:text="${player.who}"></span></p>
+
+<div class="page-wrapper">
+    <div class="player-grid">
+        <div class="card" th:if="${players != null}" th:each="player : ${players}">
+            <a th:href="@{/playerInfo/{backNumber}(backNumber=${player.backNumber})}">
+                <img class="card-img" th:src="${player.src}" alt="player's image">
+            </a>
+            <div class="card-body">
+                <p class="card-name" th:text="${player.name}"></p>
+                <p class="card-sub" th:text="'#' + ${player.backNumber}"></p>
+                <p class="card-sub">追加した人：<span th:text="${player.who}"></span></p>
+            </div>
+        </div>
+        <div th:if="${players == null}">
+            <p>선수 정보가 없습니다.</p>
+        </div>
     </div>
+
+    <ul class="pagination">
+        <li th:class="${page==0}?'disabled'">
+            <a th:href="@{/list/{p}(p=${page - 1})}">&laquo;</a>
+        </li>
+
+        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:class="${i == page} ? 'active'">
+            <a th:href="@{/list/{p}(p=${i})}" th:text="${i + 1}">1</a>
+        </li>
+
+        <li th:class="${page == totalPages - 1} ? 'disabled'">
+            <a th:href="@{/list/{p}(p=${page+1})}">&raquo;</a>
+        </li>
+    </ul>
 </div>
-<div th:if="${players == null}">
-    <p>선수 정보가 없습니다.</p>
-</div>
-
-<ul class="pagination">
-    <li th:class="${page==0}?'disabled'">
-        <a th:href="@{/list/{p}(p=${page - 1})}">&laquo;</a>
-    </li>
-
-    <li th:each=" i : ${#numbers.sequence(0, totalPages - 1)}"
-        th:class = "${i == page} ? 'active' ">
-        <a th:href="@{/list/{p}(p=${i})}" th:text="${i + 1}">1</a>
-    </li>
-
-    <li th:class = "${page == totalPages - 1} ? 'disabled'">
-        <a th:href="@{/list/{p}(p=${page+1})}">&raquo;</a>
-    </li>
-</ul>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>
-</script>
 </body>
 </html>

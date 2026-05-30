@@ -1,103 +1,88 @@
-.box {
-    margin: 30px auto;
+/* 상품 상세 레이아웃 */
+.product-detail-box {
     display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    padding: 36px;
 }
 
-.box img {
-    width: 150px;
-    margin-right: 20px;
-}
-
-.nav-title {
-    display: flex;
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center; /* 수직 가운데 정렬 */
-    gap: 10px; /* 이미지와 글자 사이 여백 */
-    padding: 10px;
-}
-
-.nav-title > .nav-name {
-    font-size: 30px;
-    letter-spacing: 5px;
-    color: darkred;
-}
-
-.nav-title > .nav-logo{
-    width: 20%;
-}
-
-input, button {
-    padding: 8px 13px;
-    margin-top: 5px;
-    border: 1px solid grey;
-    border-radius: 4px;
-    vertical-align: middle;
-}
-
-button {
-    background: black;
-    color: white;
-    border: none;
-}
-
-button:hover{
-    transform:scale(1.1);
-    transition:all 0.4s ease;
-}
-
-input {
+.product-detail-box > div:first-child img {
+    width: 280px;
+    border-radius: 8px;
+    object-fit: cover;
     display: block;
 }
 
-.pagination {
+.product-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #7b0008;
+    margin-bottom: 24px;
+}
+
+/* 수량 조절 */
+.control {
     display: flex;
-    justify-content: center;
-    padding: 20px;
-    list-style: none;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 16px;
 }
 
-.pagination li {
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-.pagination a {
-    display: block;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: #007bff;
-    border: 1px solid #ddd;
+.control .btn {
+    padding: 8px 14px;
+    font-size: 18px;
+    line-height: 1;
     border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
 }
 
-.pagination a:hover {
-    background-color: #007bff;
-    color: white;
+.control .count {
+    min-width: 48px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 12px;
 }
 
-.pagination .active a {
-    background-color: #007bff;
-    color: white;
-    pointer-events: none;
-    border-color: #007bff;
+/* 주문 버튼 그룹 */
+.order {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 250px;
+    margin-top: 8px;
 }
 
-.pagination .disabled a {
-    color: #ccc;
-    pointer-events: none;
-    border-color: #eee;
+.order .btn {
+    width: 100%;
 }
 
-.control > button {
-    margin: 10px;
+.order h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 8px 0 0;
+    color: #333;
 }
 
-.control > span{
-    margin : 10px 50px;
-    font-size: 24px;
-}
+@media (max-width: 640px) {
+    .product-detail-box {
+        flex-direction: column;
+        padding: 24px;
+    }
 
-.order > button{
-    margin : 10px;
+    .product-detail-box > div:first-child img {
+        width: 100%;
+    }
+
+    .order {
+        width: 100%;
+    }
 }

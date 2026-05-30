@@ -5,13 +5,24 @@
     <title>MyPage</title>
     <link href="/main.css" rel="stylesheet">
     <link href="/navbar.css" rel="stylesheet">
-
+    <link href="/card.css" rel="stylesheet">
+    <link href="/form.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{ Normal/nav.html :: navbar }"></div>
 
-<h4>ようこそ</h4>
-<span th:text="${nickName}">様</span>
+<div class="page-wrapper">
+    <div style="background:#fff; border-radius:12px; padding:28px 32px; box-shadow:0 2px 8px rgba(0,0,0,0.10); margin-bottom:24px;">
+        <p style="font-size:18px; font-weight:700; margin:0;">
+            ようこそ、<span th:text="${nickName}"></span> 様
+        </p>
+    </div>
 
+    <h2 class="page-section-title">好きな選手リスト（５人まで登録できます）</h2>
+    <div style="margin-bottom:32px;"></div>
+
+    <h2 class="page-section-title">グッズ注文リスト</h2>
+    <div></div>
+</div>
 </body>
 </html>

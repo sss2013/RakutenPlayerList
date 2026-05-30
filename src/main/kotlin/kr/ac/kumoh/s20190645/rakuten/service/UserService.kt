@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class UserService(private val userRepository: UserRepository, val encoder: BCryptPasswordEncoder) {
 
     fun addUser(userName: String, passWord: String, nickName: String): String {
-        if (!isValidId(userName)) {
+        if (!isValidName(userName)) {
             return "IDは英語と数字を含めて５文字以上にしてください"
         }
 
@@ -27,7 +27,7 @@ class UserService(private val userRepository: UserRepository, val encoder: BCryp
             return nickNameResult
         }
 
-        if (isDuplicateId(userName))
+        if (isDuplicateName(userName))
             return "IDが重複しています"
         if (isDuplicateNickname(nickName))
             return "ニックネームが重複しています"
@@ -38,7 +38,7 @@ class UserService(private val userRepository: UserRepository, val encoder: BCryp
         return "ok"
     }
 
-    fun isDuplicateId(userName: String): Boolean {
+    fun isDuplicateName(userName: String): Boolean {
         val found = userRepository.findByUsername(userName)?.username
         return found != null
     }
@@ -58,7 +58,7 @@ class UserService(private val userRepository: UserRepository, val encoder: BCryp
             "true"
     }
 
-    fun isValidId(id: String): Boolean {
+    fun isValidName(id: String): Boolean {
         val regex = Regex("^[a-z0-9]{5,15}$")
         return regex.matches(id)
     }
@@ -79,5 +79,10 @@ class UserService(private val userRepository: UserRepository, val encoder: BCryp
     fun getUser(number: Long?): User? {
         val found = userRepository.findByNumber(number) ?: return null
         return found
+    }
+
+    fun getId(username:String) : Long? {
+        val found = userRepository.findByUsername(username) ?: return null
+        return found.id
     }
 }
